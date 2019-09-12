@@ -5,11 +5,13 @@ import com.mree.app.core.common.ws.ServiceUri;
 import com.mree.app.core.exception.AppServiceException;
 import com.mree.app.core.persist.BaseEntity;
 import com.mree.app.core.service.IBaseService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /** * @author MREE * * */
+@Slf4j
 @CrossOrigin(origins = "*")
 public abstract class BaseController < E extends BaseEntity < I >, I extends BaseInfo, S extends IBaseService < E, I > > {
 
