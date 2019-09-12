@@ -17,6 +17,4 @@ public interface IUserService extends IBaseService<User, UserInfo> {
 
     String login(UserInfo info) throws AppServiceException;
 
-    List<UserInfo> getListByStatus(Integer code) throws AppServiceException;
-
 }

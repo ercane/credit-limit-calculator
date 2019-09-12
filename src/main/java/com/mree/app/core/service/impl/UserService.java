@@ -76,7 +76,7 @@ public class UserService extends BaseService<User, UserInfo> implements IUserSer
     }
 
     @Override
-    public User prepareForCreate(UserInfo info) throws AppServiceException {
+    public User beforeCreate(UserInfo info) throws AppServiceException {
         validateFields(info);
 
         List<User> list = getRepo().findByUsername(info.getUsername());
@@ -85,32 +85,31 @@ public class UserService extends BaseService<User, UserInfo> implements IUserSer
             throw new AppServiceException("There is already a username as " + info.getUsername());
         }
 
-        User entity = new User();
-        entity.fromInfo(info);
-        return entity;
+        return getEntity(info);
     }
 
     @Override
-    public User prepareForUpdate(UserInfo info) throws AppServiceException {
-        validateFields(info);
+    public void afterCreate(User entity) throws AppServiceException {
 
+    }
+
+    @Override
+    public User beforeUpdate(UserInfo info) throws AppServiceException {
         if (info.getId() == null) {
             throw new AppServiceException("User cannot be found. Because there is no id ");
         }
 
-        User entity = getRepo().findById(info.getId()).get();
-
-        if (entity == null) {
-            throw new AppServiceException("There is no a user with id " + info.getId());
-        }
-
-        entity.fromInfo(info);
-        return entity;
+        validateFields(info);
+        return getEntity(info);
     }
 
     @Override
-    public void prepareForDelete(Long id) throws AppServiceException {
+    public void afterUpdate(User entity) throws AppServiceException {
 
+    }
+
+    @Override
+    public void beforeDelete(Long id) throws AppServiceException {
         if (id == null) {
             throw new AppServiceException("User cannot be found. Because there is no id ");
         }
@@ -163,18 +162,5 @@ public class UserService extends BaseService<User, UserInfo> implements IUserSer
         }
     }
 
-    @Override
-    public List<UserInfo> getListByStatus(Integer code) throws AppServiceException {
-        try {
-            List<User> eList = getRepo().findByStatus(code);
-            List<UserInfo> list = new ArrayList<>();
-            for (User e : eList) {
-                list.add(e.toInfo());
-            }
-            return list;
-        } catch (Exception e) {
-            throw new AppServiceException(e);
-        }
-    }
 
 }

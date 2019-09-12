@@ -22,31 +22,31 @@ public abstract class BaseController < E extends BaseEntity < I >, I extends Bas
     }
 
     @ResponseBody
-    @RequestMapping(path = ServiceUri.ID_PARAM, method = RequestMethod.GET)
+    @GetMapping(path = ServiceUri.ID_PARAM)
     public I getById(@PathVariable Long id) throws AppServiceException {
         return getService().getById(id);
     }
 
     @ResponseBody
-    @RequestMapping(path = ServiceUri.ADD, method = RequestMethod.POST)
+    @PostMapping(path = ServiceUri.ADD)
     I create(@RequestBody I info) throws AppServiceException {
         return getService().create(info);
     }
 
     @ResponseBody
-    @RequestMapping(path = ServiceUri.UPDATE, method = RequestMethod.POST)
+    @PutMapping(path = ServiceUri.UPDATE)
     I update(@RequestBody I info) throws AppServiceException {
         return getService().update(info);
     }
 
     @ResponseBody
-    @RequestMapping(path = ServiceUri.LIST, method = RequestMethod.GET)
+    @GetMapping(path = ServiceUri.LIST)
     List < I > getList() throws AppServiceException {
         return getService().getList();
     }
 
     @ResponseBody
-    @RequestMapping(path = ServiceUri.DELETE_ID, method = RequestMethod.DELETE)
+    @DeleteMapping(path = ServiceUri.DELETE_ID)
     void delete(@PathVariable Long id) throws AppServiceException {
         getService().delete(id);
     }

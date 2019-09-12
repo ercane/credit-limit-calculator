@@ -16,15 +16,19 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends BaseInfo> i
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseService.class);
 
-    public abstract BaseRepository < E, I > getRepo();
+    public abstract BaseRepository<E, I> getRepo();
 
     public abstract E getEntity(I info);
 
-    public abstract E prepareForCreate(I info) throws AppServiceException;
+    public abstract E beforeCreate(I info) throws AppServiceException;
 
-    public abstract E prepareForUpdate(I info) throws AppServiceException;
+    public abstract void afterCreate(E entity) throws AppServiceException;
 
-    public abstract void prepareForDelete(Long id) throws AppServiceException;
+    public abstract E beforeUpdate(I info) throws AppServiceException;
+
+    public abstract void afterUpdate(E entity) throws AppServiceException;
+
+    public abstract void beforeDelete(Long id) throws AppServiceException;
 
     @Override
     public I getById(Long id) throws AppServiceException {
@@ -35,8 +39,10 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends BaseInfo> i
     @Override
     public I create(I info) throws AppServiceException {
         try {
-            E entity = prepareForCreate(info);
+            E entity = beforeCreate(info);
+            entity.fromInfo(info);
             entity = getRepo().save(entity);
+            afterCreate(entity);
             return entity.toInfo();
         } catch (Exception e) {
             throw new AppServiceException(e);
@@ -46,8 +52,10 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends BaseInfo> i
     @Override
     public I update(I info) throws AppServiceException {
         try {
-            E entity = prepareForUpdate(info);
+            E entity = beforeUpdate(info);
+            entity.fromInfo(info);
             entity = getRepo().save(entity);
+            afterUpdate(entity);
             return entity.toInfo();
         } catch (Exception e) {
             throw new AppServiceException(e);
@@ -57,7 +65,7 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends BaseInfo> i
     @Override
     public void delete(Long id) throws AppServiceException {
         try {
-            prepareForDelete(id);
+            beforeDelete(id);
             getRepo().deleteById(id);
         } catch (Exception e) {
             throw new AppServiceException(e);
@@ -65,13 +73,11 @@ public abstract class BaseService<E extends BaseEntity<I>, I extends BaseInfo> i
     }
 
     @Override
-    public List < I > getList() throws AppServiceException {
+    public List<I> getList() throws AppServiceException {
         try {
-            List < E > eList = (List < E >) getRepo().findAll();
-            List < I > list = new ArrayList <>();
-            for (E e : eList) {
-                list.add(e.toInfo());
-            }
+            List<E> eList = (List<E>) getRepo().findAll();
+            List<I> list = new ArrayList<>();
+            eList.stream().forEach(e -> list.add(e.toInfo()));
             return list;
         } catch (Exception e) {
             throw new AppServiceException(e);

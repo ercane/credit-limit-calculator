@@ -8,13 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
+@EnableFeignClients
 public class SpringDemoApplication extends SpringBootServletInitializer {
 
-    private static final Logger log = LoggerFactory.getLogger(SpringDemoApplication.class);
-    @Autowired
-    private IUserService userService;
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
