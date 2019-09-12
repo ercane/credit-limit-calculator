@@ -2,18 +2,22 @@
 
 A simple CRUD operation for user and auth mechanism application using Spring Boot with the following options:
 
-- Spring JPA and MySQL for data persistence
+- Spring JPA and H2DB for data persistence
 - JWT auth token
 - Authorization: Bearer system for authentication
-- REST API for requests
+- Rest Controller for requests
+- Random.com random number generator api used for randomize credit point
+- Feign used for connection with random.com
+- Lombok used
+- A Postman collection created, exported and added to resource folder. This collection can be import to Postman.
 
-To build and run the sample from a fresh clone of this repo:
 
-## Configure MySQL
 
-1. Create a database in your MySQL instance.
-2. Update the application.properties file in the `src/main/resources` folder with the URL, username and password for your MySQL instance. The table schema for the app objects will be created for you in the database.
-3. Create user with /user/signup endpoint.
-4. Login user with /user/login endpoint.
-5. Other endpoints need header Authorization: Bearer {{TOKEN}}
+
+* mvn spring-boot:run
+* All endpoints need header Authorization: Bearer {{TOKEN}}, except /user/signup and /user/login
+* Username: system password: system user created first. This user can be used to take token /user/login endpoint.
+* A customer created from /customer/add endpoint. While creating, also credit limit will calculate.
+* /customer/calculateCreditLimit/{customerId} endpoint can be used to calculate credit limit of already created customers
+
 
