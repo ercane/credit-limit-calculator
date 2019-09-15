@@ -54,10 +54,10 @@ public class UserService extends BaseService<User, UserInfo> implements IUserSer
         List<User> system = getRepo().findByUsername("system");
         if (system == null || system.isEmpty()) {
             UserInfo i = new UserInfo();
-            i.setName("System");
+            i.setName("Test");
             i.setSurname("User");
-            i.setUsername("eercan");
-            i.setPassword("system");
+            i.setUsername("test");
+            i.setPassword("test");
             i.setStatus(UserStatus.ACTIVE);
             signup(i);
         }
