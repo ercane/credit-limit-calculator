@@ -40,7 +40,6 @@ public class UserService extends BaseService<User, UserInfo> implements IUserSer
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    private UserInfo user;
 
     @Override
     public UserRepository getRepo() {
