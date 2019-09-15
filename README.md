@@ -22,7 +22,7 @@ A simple CRUD operation for user and auth mechanism application using Spring Boo
 
 
 # Starting from Docker
-    `_mvn install dockerfile:build_`
+    mvn install dockerfile:build
 command create Docker image. This image can be added Docker. 
 
 
