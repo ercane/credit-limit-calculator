@@ -16,7 +16,7 @@ A simple CRUD operation for user and auth mechanism application using Spring Boo
 # Starting from console
 * mvn spring-boot:run
 * All endpoints need header Authorization: Bearer {{TOKEN}}, except /user/signup and /user/login
-* Username: system password: system user created first. This user can be used to take token /user/login endpoint.
+* Username: test password: test user created first. This user can be used to take token /user/login endpoint.
 * A customer created from /customer/add endpoint. While creating, also credit limit will calculate.
 * /customer/calculateCreditLimit/{customerId} endpoint can be used to calculate credit limit of already created customers
 

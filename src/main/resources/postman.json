@@ -113,7 +113,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n\t\"username\":\"system\",\n\t\"password\":\"system\"\n}"
+          "raw": "{\n\t\"username\":\"test\",\n\t\"password\":\"test\"\n}"
         },
         "url": {
           "raw": "http://localhost:8080/user/login",
