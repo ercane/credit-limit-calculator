@@ -2,17 +2,20 @@ package com.mree.app.core.service.impl;
 
 import com.mree.app.core.client.CreditPointClient;
 import com.mree.app.core.common.model.CustomerInfo;
+import com.mree.app.core.common.ref.CustomerStatus;
 import com.mree.app.core.exception.AppServiceException;
 import com.mree.app.core.persist.Customer;
-import com.mree.app.core.repo.BaseRepository;
 import com.mree.app.core.repo.CustomerRepository;
 import com.mree.app.core.service.ICustomerService;
 import com.mree.app.core.util.CreditLimitCalculator;
+import com.mree.app.core.util.GeneralUtils;
 import com.mree.app.core.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,7 +29,7 @@ public class CustomerService extends BaseService<Customer, CustomerInfo> impleme
     private CreditPointClient creditPointClient;
 
     @Override
-    public BaseRepository<Customer, CustomerInfo> getRepo() {
+    public CustomerRepository getRepo() {
         return customerRepository;
     }
 
@@ -42,6 +45,12 @@ public class CustomerService extends BaseService<Customer, CustomerInfo> impleme
     @Override
     public Customer beforeCreate(CustomerInfo info) throws AppServiceException {
         validateFields(info);
+
+        Customer customer = getRepo().findByTcNo(info.getTcNo());
+        if (Objects.nonNull(customer)) {
+            throw new AppServiceException("There is a customer has same Tc Number");
+        }
+
         return getEntity(info);
     }
 
@@ -80,9 +89,28 @@ public class CustomerService extends BaseService<Customer, CustomerInfo> impleme
         return calculateCreditLimit(customer.get());
     }
 
+    @Override
+    public CustomerInfo getByTcNo(String tcNo) throws AppServiceException {
+        Customer customer = getRepo().findByTcNo(tcNo);
+        return customer.toInfo();
+    }
+
+    @Override
+    public List<CustomerInfo> getByStatus(CustomerStatus status) throws AppServiceException {
+        List<Customer> list = getRepo().findByStatus(status);
+        List<CustomerInfo> infoList = new ArrayList<>();
+        list.stream().forEach(c -> infoList.add(c.toInfo()));
+        return infoList;
+    }
+
     public CustomerInfo calculateCreditLimit(Customer entity) throws AppServiceException {
-        String creditPoint = creditPointClient.getCreditPoint();
-        creditPoint=creditPoint.replace(System.lineSeparator(),""); //Service send response with line seperator
+        String creditPoint = "0";
+        try {
+            creditPoint = creditPointClient.getCreditPoint();
+            creditPoint = creditPoint.replace(System.lineSeparator(), ""); //Service send response with line seperator
+        } catch (Exception e) {
+            creditPoint = "" + GeneralUtils.generateRandom(0, 2000);
+        }
         Double creditLimit = CreditLimitCalculator.calculateCreditLimit(Integer.parseInt(creditPoint), entity.getMonthlyIncome());
         entity.setCreditLimit(creditLimit);
         entity = getRepo().save(entity);
@@ -90,6 +118,10 @@ public class CustomerService extends BaseService<Customer, CustomerInfo> impleme
     }
 
     private void validateFields(CustomerInfo info) throws AppServiceException {
+        if (!StringUtils.hasLength(info.getTcNo())) {
+            throw new AppServiceException("Tc No is required!");
+        }
+
         if (!StringUtils.hasLength(info.getName())) {
             throw new AppServiceException("Name is required!");
         }

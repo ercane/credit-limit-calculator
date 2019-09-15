@@ -1,11 +1,11 @@
 package com.mree.app.core.service.impl;
 
+import com.mree.app.core.common.model.AuthUserInfo;
 import com.mree.app.core.common.model.UserInfo;
 import com.mree.app.core.common.ref.Role;
 import com.mree.app.core.common.ref.UserStatus;
 import com.mree.app.core.config.JwtTokenProvider;
 import com.mree.app.core.exception.AppServiceException;
-import com.mree.app.core.exception.CustomException;
 import com.mree.app.core.persist.User;
 import com.mree.app.core.repo.UserRepository;
 import com.mree.app.core.service.IUserService;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,6 +40,7 @@ public class UserService extends BaseService<User, UserInfo> implements IUserSer
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    private UserInfo user;
 
     @Override
     public UserRepository getRepo() {
@@ -56,8 +56,8 @@ public class UserService extends BaseService<User, UserInfo> implements IUserSer
             UserInfo i = new UserInfo();
             i.setName("System");
             i.setSurname("User");
+            i.setUsername("eercan");
             i.setPassword("system");
-            i.setUsername("system");
             i.setStatus(UserStatus.ACTIVE);
             signup(i);
         }
@@ -145,20 +145,29 @@ public class UserService extends BaseService<User, UserInfo> implements IUserSer
     }
 
     @Override
-    public String signup(UserInfo info) throws AppServiceException {
+    public AuthUserInfo signup(UserInfo info) throws AppServiceException {
         info.setPassword(passwordEncoder.encode(info.getPassword()));
         UserInfo create = create(info);
-        return jwtTokenProvider.createToken(create.getUsername(), Arrays.asList(Role.ROLE_CLIENT));
+        String token = jwtTokenProvider.createToken(create.getUsername(), Arrays.asList(Role.ROLE_CLIENT));
+        AuthUserInfo authUserInfo = new AuthUserInfo();
+        authUserInfo.setUser(create);
+        authUserInfo.setToken(token);
+        return authUserInfo;
     }
 
     @Override
-    public String login(UserInfo info) throws AppServiceException {
+    public AuthUserInfo login(UserInfo info) throws AppServiceException {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(info.getUsername(), info.getPassword()));
-            return jwtTokenProvider.createToken(info.getUsername(), Arrays.asList(Role.ROLE_CLIENT));
+            User user = getByUsername(info.getUsername());
+            String token = jwtTokenProvider.createToken(info.getUsername(), Arrays.asList(Role.ROLE_CLIENT));
+            AuthUserInfo authUserInfo = new AuthUserInfo();
+            authUserInfo.setUser(user.toInfo());
+            authUserInfo.setToken(token);
+            return authUserInfo;
         } catch (AuthenticationException e) {
-            throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new AppServiceException("Invalid username/password supplied " + HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 

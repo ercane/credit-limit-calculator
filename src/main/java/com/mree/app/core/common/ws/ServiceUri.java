@@ -12,6 +12,8 @@ public class ServiceUri {
     public static final String DELETE = "/delete";
     public static final String LIST = "/list";
 
+    public static final String STATUS = "/status";
+
     public static final String DELETE_ID = DELETE + ID_PARAM;
     public static final String LIST_ID = LIST + ID_PARAM;
 

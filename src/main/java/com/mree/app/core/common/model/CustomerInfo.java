@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class CustomerInfo extends BaseInfo {
+    private String tcNo;
     private String name;
     private String surname;
     private Double monthlyIncome;

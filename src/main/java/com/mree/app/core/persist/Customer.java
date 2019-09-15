@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 @Entity
 public class Customer extends BaseEntity<CustomerInfo> {
 
+    private String tcNo;
     private String name;
     private String surname;
     private Double monthlyIncome;
@@ -24,6 +25,7 @@ public class Customer extends BaseEntity<CustomerInfo> {
     @Override
     public CustomerInfo toInfo() {
         CustomerInfo i=new CustomerInfo();
+        i.setTcNo(getTcNo());
         i.setId(getId());
         i.setCreatedDate(getCreatedDate());
         i.setUpdatedDate(getUpdatedDate());
@@ -37,6 +39,7 @@ public class Customer extends BaseEntity<CustomerInfo> {
 
     @Override
     public void fromInfo(CustomerInfo info) {
+        setTcNo(info.getTcNo());
         setCreditLimit(info.getCreditLimit());
         setMonthlyIncome(info.getMonthlyIncome());
         setName(info.getName());
