@@ -1,0 +1,166 @@
+{
+  "info": {
+    "_postman_id": "a3928c47-6782-43b9-8565-a6fa8d2bb7c4",
+    "name": "Koç Finans",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Sign Up",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"name\":\"A\",\n\t\"surname\":\"A\",\n\t\"role\":\"ROLE_ADMIN\",\n\t\"status\":\"ACTIVE\",\n\t\"username\":\"a\",\n\t\"password\":\"a\"\n}"
+        },
+        "url": {
+          "raw": "localhost:8080/user/signup",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "user",
+            "signup"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Customer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"name\":\"Customer\",\n\t\"surname\":\"2\",\n\t\"status\":\"ACTIVE\",\n\t\"monthlyIncome\":6000,\n\t\"phone\":5555555555\n}"
+        },
+        "url": {
+          "raw": "localhost:8080/customer/add",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "customer",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Calculate Customer Credit Limit",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "localhost:8080/customer/calculateCreditLimit/4",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "customer",
+            "calculateCreditLimit",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\":\"system\",\n\t\"password\":\"system\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/user/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "user",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeXN0ZW0iLCJhdXRoIjpbeyJhdXRob3JpdHkiOiJST0xFX0NMSUVOVCJ9XSwiaWF0IjoxNTY4MzE5MzA4LCJleHAiOjE1NjgzMjI5MDh9.kVsI80RewsFgxAKy9AuMX_MuKU02thVc4n4O7G6-7uc",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "1f781be0-4a76-495f-a47f-8c5e865e0587",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "4ae51978-229e-4585-b152-25be3db42928",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
