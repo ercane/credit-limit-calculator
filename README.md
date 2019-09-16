@@ -15,6 +15,7 @@ A simple CRUD operation for user and auth mechanism application using Spring Boo
 
 # Starting from console
 * mvn spring-boot:run
+* Server port is 9090
 * All endpoints need header Authorization: Bearer {{TOKEN}}, except /user/signup and /user/login
 * Username: test password: test user created first. This user can be used to take token /user/login endpoint.
 * A customer created from /customer/add endpoint. While creating, also credit limit will calculate.
